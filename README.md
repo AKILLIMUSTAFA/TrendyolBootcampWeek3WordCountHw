@@ -1,0 +1,1 @@
+# TrendyolBootcampWeek3WordCountHw
