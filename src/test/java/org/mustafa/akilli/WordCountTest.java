@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,13 +44,25 @@ public class WordCountTest {
     @Test
     public void calculateWordCount_WhenInputIsEmpty_ShouldReturn0(){
         //Arrange
-        String sentence = "Hi all";
+        String sentence = "";
 
         //Act
         int result = sut.calculateWordCount(sentence);
 
         //Assert
-        assertEquals(2, result);
+        assertEquals(0, result);
+    }
+
+    @Test
+    public void calculateWordCount_WhenInputDoesNotContainWord_ShouldReturn0(){
+        //Arrange
+        String sentence = "  ,   .   ";
+
+        //Act
+        int result = sut.calculateWordCount(sentence);
+
+        //Assert
+        assertEquals(0, result);
     }
 
     @Test
@@ -85,7 +98,7 @@ public class WordCountTest {
         int result = sut.calculateWordCount(sentence);
 
         //Assert
-        assertEquals(1, result);
+        assertEquals(3, result);
     }
 
     @ParameterizedTest
@@ -106,6 +119,7 @@ public class WordCountTest {
                 Arguments.of("David.", 1),
                 Arguments.of("David, Davids and Henry will go to Sivas.", 8),
                 Arguments.of("Happiness is not just happiness.", 4),
+                Arguments.of("      David      is       a      man  .   ", 4),
                 Arguments.of("David is awesome.", 3));
     }
 
@@ -115,7 +129,7 @@ public class WordCountTest {
         String sentence = "David";
 
         //Act
-        ArrayList<String> resultList = sut.splitStringBySpace(sentence);
+        List<String> resultList = sut.splitStringBySpace(sentence);
 
         //Assert
         assertEquals(1, resultList.size());
@@ -127,7 +141,7 @@ public class WordCountTest {
         String sentence = "David's Davids";
 
         //Act
-        ArrayList<String> resultList = sut.splitStringBySpace(sentence);
+        List<String> resultList = sut.splitStringBySpace(sentence);
 
         //Assert
         assertEquals(2, resultList.size());
@@ -139,7 +153,7 @@ public class WordCountTest {
         String sentence = "David is Davids";
 
         //Act
-        ArrayList<String> resultList = sut.splitStringBySpace(sentence);
+        List<String> resultList = sut.splitStringBySpace(sentence);
 
         //Assert
         assertEquals(3, resultList.size());
@@ -151,7 +165,7 @@ public class WordCountTest {
         String sentence = "David  friends";
 
         //Act
-        ArrayList<String> resultList = sut.splitStringBySpace(sentence);
+        List<String> resultList = sut.splitStringBySpace(sentence);
 
         //Assert
         assertEquals(2, resultList.size());
@@ -163,7 +177,7 @@ public class WordCountTest {
         String sentence = " David";
 
         //Act
-        ArrayList<String> resultList = sut.splitStringBySpace(sentence);
+        List<String> resultList = sut.splitStringBySpace(sentence);
 
         //Assert
         assertEquals(1, resultList.size());
@@ -175,7 +189,7 @@ public class WordCountTest {
         String sentence = "  David";
 
         //Act
-        ArrayList<String> resultList = sut.splitStringBySpace(sentence);
+        List<String> resultList = sut.splitStringBySpace(sentence);
 
         //Assert
         assertEquals(1, resultList.size());
@@ -187,7 +201,7 @@ public class WordCountTest {
         String sentence = "David  ";
 
         //Act
-        ArrayList<String> resultList = sut.splitStringBySpace(sentence);
+        List<String> resultList = sut.splitStringBySpace(sentence);
 
         //Assert
         assertEquals(1, resultList.size());
@@ -199,10 +213,22 @@ public class WordCountTest {
         String sentence = "  David  ";
 
         //Act
-        ArrayList<String> resultList = sut.splitStringBySpace(sentence);
+        List<String> resultList = sut.splitStringBySpace(sentence);
 
         //Assert
         assertEquals(1, resultList.size());
+    }
+
+    @Test
+    public void splitStringBySpace_WhenInputStringContainsMultipleSpaceAnd4Word_ShouldReturn4(){
+        //Arrange
+        String sentence = "      David      is       a      man.   ";
+
+        //Act
+        List<String> resultList = sut.splitStringBySpace(sentence);
+
+        //Assert
+        assertEquals(4, resultList.size());
     }
 
     @Test
@@ -247,7 +273,7 @@ public class WordCountTest {
         String word = "David";
 
         //Act
-        ArrayList<String> resultList = sut.separateWordsThatHaveApostrophes(word);
+        List<String> resultList = sut.separateWordsThatHaveApostrophes(word);
 
         //Assert
         assertEquals(1, resultList.size());
@@ -259,31 +285,31 @@ public class WordCountTest {
         String word = "David's";
 
         //Act
-        ArrayList<String> resultList = sut.separateWordsThatHaveApostrophes(word);
+        List<String> resultList = sut.separateWordsThatHaveApostrophes(word);
 
         //Assert
         assertEquals(2, resultList.size());
     }
 
     @Test
-    public void uppercaseToLowercase_WhenInputStringContainsUppercase_ShouldReturnStringWithLowercase(){
+    public void uppercaseToLowercaseForWord_WhenInputStringContainsUppercase_ShouldReturnStringWithLowercase(){
         //Arrange
         String word = "DAVID";
 
         //Act
-        String result = sut.uppercaseToLowercase(word);
+        String result = sut.uppercaseToLowercaseForWord(word);
 
         //Assert
         assertThat(result).isEqualTo("david");
     }
 
     @Test
-    public void uppercaseToLowercase_WhenInputStringDoesNotContainsUppercase_ShouldReturnSameString(){
+    public void uppercaseToLowercaseForWord_WhenInputStringDoesNotContainsUppercase_ShouldReturnSameString(){
         //Arrange
         String word = "david";
 
         //Act
-        String result = sut.uppercaseToLowercase(word);
+        String result = sut.uppercaseToLowercaseForWord(word);
 
         //Assert
         assertThat(result).isEqualTo("david");
