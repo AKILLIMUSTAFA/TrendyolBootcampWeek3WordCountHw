@@ -8,7 +8,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -120,6 +119,7 @@ public class WordCountTest {
                 Arguments.of("David, Davids and Henry will go to Sivas.", 8),
                 Arguments.of("Happiness is not just happiness.", 4),
                 Arguments.of("      David      is       a      man  .   ", 4),
+                Arguments.of("      Yes      yes    ,   yeS      YES  .   ", 1),
                 Arguments.of("David is awesome.", 3));
     }
 

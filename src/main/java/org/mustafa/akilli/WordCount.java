@@ -4,7 +4,7 @@ import java.util.*;
 
 public class WordCount {
     List<String> wordsArray;
-    Map<String,Integer> uniqueWordArray = new HashMap<>();
+    Map<String,Integer> uniqueWordArray;
 
 
     public int calculateWordCount(String sentence) {
@@ -18,15 +18,10 @@ public class WordCount {
         }
 
         wordsArray = splitStringBySpace(sentence);
-        wordsArray = separateWordsListThatHaveApostrophes(wordsArray);
-        wordsArray = clearThePunctuationFromWordList(wordsArray);
-        wordsArray = uppercaseToLowercaseForWordList(wordsArray);
-
-        for (int i = 0; i < wordsArray.size(); i++) {
-            if(wordsArray.get(i).length() > 0){
-                uniqueWordArray.put(wordsArray.get(i),0);
-            }
-        }
+        separateWordsListThatHaveApostrophes(wordsArray);
+        clearThePunctuationFromWordList(wordsArray);
+        uppercaseToLowercaseForWordList(wordsArray);
+        uniqueWordArray = arrayToUniqueMap(wordsArray);
 
         return uniqueWordArray.size();
     }
@@ -43,28 +38,27 @@ public class WordCount {
         return arrayList;
     }
 
-    public List<String> clearThePunctuationFromWordList(List<String> wordsList) {
-        List<String> wordListWithoutPunctuation = new ArrayList<>();
-
+    public void clearThePunctuationFromWordList(List<String> wordsList) {
         for (int i = 0; i < wordsList.size(); i++) {
-            wordListWithoutPunctuation.add(clearThePunctuationFromWord(wordsList.get(i)));
+            wordsList.set(i,clearThePunctuationFromWord(wordsList.get(i)));
         }
-
-        return wordListWithoutPunctuation;
     }
 
     public String clearThePunctuationFromWord(String word) {
         return word.replaceAll("[^a-zA-Z ]", "");
     }
 
-    public List<String> separateWordsListThatHaveApostrophes(List<String> wordsList) {
-        List<String> wordListWithoutApostrophes = new ArrayList<>();
-
+    public void separateWordsListThatHaveApostrophes(List<String> wordsList) {
         for (int i = 0; i < wordsList.size(); i++) {
-            wordListWithoutApostrophes.addAll(separateWordsThatHaveApostrophes(wordsList.get(i)));
-        }
+            List<String> wordsWithoutApostrophes = separateWordsThatHaveApostrophes(wordsList.get(i));
+            if(wordsWithoutApostrophes.size() > 1){
+                wordsList.set(i,wordsWithoutApostrophes.get(0));
 
-        return wordListWithoutApostrophes;
+                for (int j = 1; j < wordsWithoutApostrophes.size(); j++) {
+                    wordsList.add(wordsWithoutApostrophes.get(j));
+                }
+            }
+        }
     }
 
     public List<String> separateWordsThatHaveApostrophes(String word) {
@@ -74,17 +68,25 @@ public class WordCount {
         return arrayList;
     }
 
-    public List<String> uppercaseToLowercaseForWordList(List<String> wordsList) {
-        List<String> wordListWithLowercase = new ArrayList<>();
-
+    public void uppercaseToLowercaseForWordList(List<String> wordsList) {
         for (int i = 0; i < wordsList.size(); i++) {
-            wordListWithLowercase.add(uppercaseToLowercaseForWord(wordsList.get(i)));
+            wordsList.set(i,uppercaseToLowercaseForWord(wordsList.get(i)));
         }
-
-        return wordListWithLowercase;
     }
 
     public String uppercaseToLowercaseForWord(String word) {
         return word.toLowerCase(Locale.ENGLISH);
+    }
+
+    public Map<String,Integer> arrayToUniqueMap(List<String> wordsList){
+        Map<String,Integer> uniqueWordArray = new HashMap<>();
+
+        for (int i = 0; i < wordsArray.size(); i++) {
+            if(wordsArray.get(i).length() > 0){
+                uniqueWordArray.put(wordsArray.get(i),0);
+            }
+        }
+
+        return uniqueWordArray;
     }
 }
